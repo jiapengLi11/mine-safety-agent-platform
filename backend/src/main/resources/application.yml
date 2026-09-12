@@ -1,0 +1,47 @@
+spring:
+  application:
+    name: mineguard-backend
+  datasource:
+    url: ${MINEGUARD_DB_URL:jdbc:mysql://192.168.1.110:3306/mineguard?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC}
+    username: ${MINEGUARD_DB_USER:mineguard}
+    password: ${MINEGUARD_DB_PASSWORD:}
+  data:
+    redis:
+      host: ${MINEGUARD_REDIS_HOST:192.168.1.110}
+      port: ${MINEGUARD_REDIS_PORT:6379}
+      password: ${MINEGUARD_REDIS_PASSWORD:}
+  kafka:
+    bootstrap-servers: ${MINEGUARD_KAFKA_BOOTSTRAP_SERVERS:192.168.1.110:9092}
+    consumer:
+      group-id: ${MINEGUARD_KAFKA_CONSUMER_GROUP:mineguard-safety-core-v1}
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  flyway:
+    enabled: true
+
+server:
+  port: ${MINEGUARD_HTTP_PORT:18080}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,modulith
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+mineguard:
+  redis-key-prefix: ${MINEGUARD_REDIS_KEY_PREFIX:mineguard:}
+  topics:
+    detection-frame: ${MINEGUARD_TOPIC_DETECTION_FRAME:mineguard.vision.detection.frame.v1}
+    alert-created: ${MINEGUARD_TOPIC_ALERT_CREATED:mineguard.safety.alert.created.v1}

@@ -1,0 +1,21 @@
+services:
+  mineguard-backend:
+    build:
+      context: ..
+      dockerfile: backend/Dockerfile
+    image: mineguard/backend:0.1.0
+    container_name: mineguard-backend
+    restart: unless-stopped
+    network_mode: host
+    env_file:
+      - mineguard.local.env
+    environment:
+      MINEGUARD_DB_URL: jdbc:mysql://127.0.0.1:3306/mineguard?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+      MINEGUARD_REDIS_HOST: 127.0.0.1
+      MINEGUARD_KAFKA_BOOTSTRAP_SERVERS: 127.0.0.1:9092
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "http://127.0.0.1:18080/actuator/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 30s

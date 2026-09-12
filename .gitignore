@@ -1,0 +1,15 @@
+.idea/
+.vscode/
+.env
+*.local.env
+*.log
+target/
+**/target/
+node_modules/
+dist/
+.venv/
+__pycache__/
+models/
+data/
+_render_qa/
+_render_qa_v2/

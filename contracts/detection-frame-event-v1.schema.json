@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mineguard.local/contracts/detection-frame-event-v1.schema.json",
+  "title": "MineGuard Detection Frame Event v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "eventId",
+    "schemaVersion",
+    "traceId",
+    "cameraId",
+    "frameId",
+    "capturedAt",
+    "inferredAt",
+    "modelVersion",
+    "imageWidth",
+    "imageHeight",
+    "objects"
+  ],
+  "properties": {
+    "eventId": { "type": "string", "minLength": 1, "maxLength": 64 },
+    "schemaVersion": { "const": 1 },
+    "traceId": { "type": "string", "minLength": 1, "maxLength": 64 },
+    "cameraId": { "type": "string", "minLength": 1, "maxLength": 64 },
+    "frameId": { "type": "integer", "minimum": 0 },
+    "capturedAt": { "type": "string", "format": "date-time" },
+    "inferredAt": { "type": "string", "format": "date-time" },
+    "modelVersion": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "imageWidth": { "type": "integer", "minimum": 1 },
+    "imageHeight": { "type": "integer", "minimum": 1 },
+    "sourceObjectKey": { "type": ["string", "null"], "maxLength": 1024 },
+    "objects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["className", "confidence", "box"],
+        "properties": {
+          "className": { "type": "string", "minLength": 1, "maxLength": 64 },
+          "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+          "box": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["x1", "y1", "x2", "y2"],
+            "properties": {
+              "x1": { "type": "number", "minimum": 0 },
+              "y1": { "type": "number", "minimum": 0 },
+              "x2": { "type": "number", "exclusiveMinimum": 0 },
+              "y2": { "type": "number", "exclusiveMinimum": 0 }
+            }
+          }
+        }
+      }
+    }
+  }
+}
