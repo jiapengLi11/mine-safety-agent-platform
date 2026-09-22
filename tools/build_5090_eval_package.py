@@ -24,7 +24,13 @@ def main() -> int:
     shutil.copytree(ROOT / "evals", STAGING / "evals", ignore=ignore_eval_files)
     for source in SOURCE_SCRIPTS.iterdir():
         if source.is_file():
-            shutil.copy2(source, STAGING / source.name)
+            destination = STAGING / source.name
+            if source.suffix.lower() == ".bat":
+                destination.write_text(
+                    source.read_text(encoding="ascii"), encoding="ascii", newline="\r\n"
+                )
+            else:
+                shutil.copy2(source, destination)
 
     archive = RELEASE_ROOT / f"{PACKAGE_NAME}.zip"
     archive.unlink(missing_ok=True)

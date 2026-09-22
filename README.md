@@ -10,7 +10,7 @@
 
 MineGuard connects YOLO-based visual perception, deterministic temporal rules, evidence-grounded RAG, a constrained AI agent, human approval, work orders, and model feedback. It is being built as a reproducible engineering system rather than a collection of disconnected demos.
 
-[中文说明](README.zh-CN.md) | [System handbook](docs/矿区智能安全监控与处置平台系统设计与开发手册_v1.0.md) | [Agent evaluation](evals/README.md) | [VM deployment](deploy/VM_DEPLOYMENT.md) | [Development status](docs/DEVELOPMENT_STATUS.md)
+[中文说明](README.zh-CN.md) | [System handbook](docs/矿区智能安全监控与处置平台系统设计与开发手册_v1.0.md) | [Agent evaluation](evals/README.md) | [LLM evaluation methodology](docs/evaluation/MineGuard_LLM安全评测方法与5090模型选型记录_20260922.md) | [VM deployment](deploy/VM_DEPLOYMENT.md) | [Development status](docs/DEVELOPMENT_STATUS.md)
 
 > Project status: **Phase 1 in progress.** The backend foundation, domain rules, database baseline, tests, and VM deployment are implemented. Kafka ingestion, RTSP inference, work orders, RAG, Agent workflows, and the Vue console are roadmap items, not completed claims.
 

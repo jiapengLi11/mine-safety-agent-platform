@@ -1,5 +1,4 @@
 @echo off
-chcp 65001 >nul
 setlocal
 cd /d "%~dp0"
 
@@ -12,7 +11,7 @@ if errorlevel 1 exit /b 1
 
 python evals\run_model_matrix.py --config evals\config\qwen-matrix-5090.json --model-root E:\mineguard-models --device cuda --dry-run
 if errorlevel 1 (
-  echo [ERROR] 预检失败，不要开始正式评测。
+  echo [ERROR] Preflight failed. Do not start the matrix evaluation.
   exit /b 1
 )
-echo [PASS] 预检通过：没有加载模型，也没有执行推理。
+echo [PASS] Preflight passed. No model was loaded and no inference was run.

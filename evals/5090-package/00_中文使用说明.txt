@@ -31,7 +31,7 @@ E:\mineguard-qwen-matrix-5090
     只检查，不加载模型，不启动推理。
 
 04_run_matrix.bat
-    正式运行 3 个模型 x 3 次重复评测。请不要同时在同一张显卡上训练。
+    无需再次确认，直接运行 3 个模型 x 3 次重复评测。请不要同时在同一张显卡上训练。
     物理 GPU 1 通过 CUDA_VISIBLE_DEVICES=1 映射为进程内 cuda:0。
 
 结果位置

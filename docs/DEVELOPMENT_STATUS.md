@@ -22,6 +22,7 @@ Completed:
 - User-level service deployed with linger enabled; aggregate health is `UP` on port `18080` from both VM and Windows host.
 - Added a versioned Agent Golden format, deterministic domain metrics, Harness Evals 0.23.1 adapter, local-Qwen and OpenAI-compatible targets, release gates, negative tests, and JSON/Markdown/HTML reports.
 - Ran a real RTX 3060/Qwen3-0.6B FP16 12-case seed benchmark. It failed the candidate gate on schema validity and unexpected tool calls; the failure is retained as evidence that model text quality does not grant execution authority.
+- Ran a reproducible RTX 5090 BF16 matrix across Qwen3-1.7B, 4B, and 8B with three repeats each. Qwen3-8B was the only raw model to pass every candidate gate in all three runs; 1.7B exposed an unknown-citation hallucination and 4B exposed schema drift plus a missing approval tool.
 
 Next:
 

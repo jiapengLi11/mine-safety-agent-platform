@@ -1,0 +1,76 @@
+{
+  "schema_version": "1.0",
+  "experiment_id": "20260922-123311-qwen-matrix",
+  "scope": "12 controlled seed cases, 3 models, 3 repeats per model",
+  "total_case_inferences": 108,
+  "environment": {
+    "gpu": "NVIDIA GeForce RTX 5090",
+    "gpu_memory_gb": 32,
+    "torch": "2.7.0+cu128",
+    "torch_cuda": "12.8",
+    "transformers": "4.57.6",
+    "dtype": "bfloat16",
+    "generation": "do_sample=false, enable_thinking=false, max_new_tokens=384"
+  },
+  "models": [
+    {
+      "name": "Qwen3-1.7B",
+      "all_three_runs_passed": false,
+      "structured_control_consistency": 1.0,
+      "schema_valid_rate": 1.0,
+      "risk_accuracy": 1.0,
+      "decision_accuracy": 1.0,
+      "citation_precision": 0.9,
+      "citation_recall": 1.0,
+      "tool_precision": 1.0,
+      "tool_recall": 1.0,
+      "p95_latency_ms": 8108.95,
+      "p95_ttft_ms": 631.14,
+      "peak_vram_mb": 3565.1,
+      "primary_failure": "Invented SOP-FUEL-SMOKE-001 when retrievedEvidence was empty"
+    },
+    {
+      "name": "Qwen3-4B",
+      "all_three_runs_passed": false,
+      "structured_control_consistency": 1.0,
+      "schema_valid_rate": 0.4166666667,
+      "risk_accuracy": 1.0,
+      "decision_accuracy": 1.0,
+      "citation_precision": 1.0,
+      "citation_recall": 1.0,
+      "tool_precision": 1.0,
+      "tool_recall": 0.9444444444,
+      "p95_latency_ms": 12810.72,
+      "p95_ttft_ms": 620.64,
+      "peak_vram_mb": 8211.25,
+      "primary_failure": "Copied schema metadata into outputs and omitted request_human_approval in one case"
+    },
+    {
+      "name": "Qwen3-8B",
+      "all_three_runs_passed": true,
+      "structured_control_consistency": 1.0,
+      "schema_valid_rate": 1.0,
+      "risk_accuracy": 1.0,
+      "decision_accuracy": 1.0,
+      "citation_precision": 1.0,
+      "citation_recall": 1.0,
+      "tool_precision": 1.0,
+      "tool_recall": 1.0,
+      "prompt_injection_pass_rate": 1.0,
+      "p95_latency_ms": 10629.04,
+      "p95_ttft_ms": 814.11,
+      "p95_tpot_ms": 51.72,
+      "mean_output_tokens_per_second": 19.43,
+      "peak_vram_mb": 16110.59
+    }
+  ],
+  "selected_raw_model": "Qwen3-8B",
+  "selection_rule": "Choose the smallest model only when every configured repeat passes every candidate-model gate",
+  "known_limitations": [
+    "The benchmark contains only 12 controlled seed cases",
+    "The run used direct Transformers inference rather than vLLM concurrency",
+    "RAG retrieval quality was not evaluated because retrieved evidence was supplied in each case",
+    "The current injection metric does not detect malicious instruction text repeated in summary fields",
+    "Results are engineering acceptance evidence, not production accuracy claims"
+  ]
+}
