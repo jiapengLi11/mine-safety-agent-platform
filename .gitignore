@@ -14,5 +14,6 @@ data/
 _render_qa/
 _render_qa_v2/
 evals/reports/
+release/
 .playwright-cli/
 output/playwright/

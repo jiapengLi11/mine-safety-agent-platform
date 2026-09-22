@@ -5,6 +5,8 @@ param(
     [string]$Profile = 'ci',
     [string]$CondaEnvironment = 'yolo26',
     [string]$ModelPath = 'E:\project11\model_cache\Qwen3-0.6B-c1899de',
+    [ValidateSet('auto', 'float16', 'bfloat16', 'float32')]
+    [string]$DType = 'float16',
     [int]$Limit = 0,
     [switch]$EnforceGate
 )
@@ -23,7 +25,7 @@ $arguments = @(
     '--profile', $Profile
 )
 if ($Target -eq 'qwen') {
-    $arguments += @('--model-path', $ModelPath, '--device', 'cuda')
+    $arguments += @('--model-path', $ModelPath, '--device', 'cuda', '--dtype', $DType)
 }
 if ($Limit -gt 0) {
     $arguments += @('--limit', $Limit)
@@ -34,4 +36,3 @@ if ($EnforceGate) {
 
 & $conda @arguments
 exit $LASTEXITCODE
-

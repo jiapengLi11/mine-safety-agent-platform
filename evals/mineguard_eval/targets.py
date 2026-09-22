@@ -96,6 +96,7 @@ class TransformersQwenTarget(BaseTarget):
         system_prompt: str,
         schema: dict[str, Any],
         device: str = "cuda",
+        dtype_name: str = "float16",
         max_new_tokens: int = 384,
     ) -> None:
         try:
@@ -109,7 +110,21 @@ class TransformersQwenTarget(BaseTarget):
         self._schema = schema
         self._device = device
         self._max_new_tokens = max_new_tokens
-        dtype = torch.float16 if device.startswith("cuda") else torch.float32
+        dtype_by_name = {
+            "float16": torch.float16,
+            "bfloat16": torch.bfloat16,
+            "float32": torch.float32,
+        }
+        if dtype_name == "auto":
+            dtype_name = (
+                "bfloat16"
+                if device.startswith("cuda") and torch.cuda.is_bf16_supported()
+                else "float16" if device.startswith("cuda") else "float32"
+            )
+        if dtype_name not in dtype_by_name:
+            raise ValueError(f"Unsupported dtype: {dtype_name}")
+        dtype = dtype_by_name[dtype_name]
+        self.dtype_name = dtype_name
         self._tokenizer = AutoTokenizer.from_pretrained(str(model_path), local_files_only=True)
         self._model = AutoModelForCausalLM.from_pretrained(
             str(model_path),

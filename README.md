@@ -144,6 +144,8 @@ An RTX 3060 run of Qwen3-0.6B passed risk, decision, citation, high-risk recall 
 
 ![RTX 3060 Qwen3 candidate evaluation](docs/assets/agent-eval-qwen3-0.6b-3060.png)
 
+For the laboratory RTX 5090, `tools/build_5090_eval_package.py` builds a roughly 40 KiB transfer package containing no model weights. The GPU host downloads Qwen3-1.7B/4B/8B itself, evaluates each model in isolated sequential processes for three repeats, checkpoints progress after every run, and selects the smallest model whose every run passes the safety gate.
+
 ## VM deployment
 
 The verified development deployment runs on an Ubuntu VMware guest. Docker Compose is the preferred path. Because that VM currently cannot resolve Docker Hub, the repository also includes an exercised offline JAR installer:

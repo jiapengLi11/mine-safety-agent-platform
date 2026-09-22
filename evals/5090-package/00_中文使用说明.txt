@@ -1,0 +1,59 @@
+MineGuard Qwen 5090 模型矩阵轻量评测包
+========================================
+
+用途
+----
+在实验室 RTX 5090 上依次评测 Qwen3-1.7B、Qwen3-4B、Qwen3-8B。
+模型权重不在本压缩包中，全部在实验室机器下载到 E:\mineguard-models。
+三个模型不会同时进入显存；每次重复评测也是独立进程，进程退出后释放显存。
+
+建议解压目录
+------------
+E:\mineguard-qwen-matrix-5090
+
+运行环境
+--------
+1. 打开 Anaconda Prompt 或 CMD。
+2. 确认实验室已有 conda 环境 ultralytics，且其中 PyTorch 能识别 RTX 5090。
+3. 以下 BAT 按编号依次双击，或在 CMD 中运行。
+
+执行顺序
+--------
+01_install_dependencies.bat
+    只安装评测、Transformers、Hugging Face 等依赖，不重装 PyTorch。
+
+02_download_models.bat
+    从 Hugging Face 官方仓库断点下载三个 Qwen 模型到 E:\mineguard-models。
+    下载量较大，确保 E 盘至少预留 40 GB。
+
+03_preflight.bat
+    检查三个模型是否完整、PyTorch 是否识别 CUDA、5090 是否支持 BF16。
+    只检查，不加载模型，不启动推理。
+
+04_run_matrix.bat
+    正式运行 3 个模型 x 3 次重复评测。请不要同时在同一张显卡上训练。
+    物理 GPU 1 通过 CUDA_VISIBLE_DEVICES=1 映射为进程内 cuda:0。
+
+结果位置
+--------
+evals\reports\时间-qwen-matrix\
+  matrix-results.json   完整机器可读结果
+  matrix-report.md      汇总表
+  matrix-report.html    浏览器可视化报告
+  matrix-progress.json  每次运行后增量保存的进度
+  各模型\run-01..03\   每次独立的案例级证据
+
+选型规则
+--------
+只有某个模型的三次运行全部通过 candidate-model 门禁，才算合格。
+多个模型合格时，自动选择参数量最小者，避免只凭一次结果或只追求大模型。
+
+网络问题
+--------
+下载脚本支持断点续传，失败后重新运行 02 即可。若实验室不能访问 Hugging Face，
+先解决代理或配置单位允许的镜像，再重跑 02；不要在本机下载后塞进轻量包。
+
+带回材料
+--------
+只需要把本次 evals\reports\时间-qwen-matrix 整个目录压缩带回。
+不需要带回 E:\mineguard-models 中的几十 GB 权重，除非后续决定部署其中一个模型。

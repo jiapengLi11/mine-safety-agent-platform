@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0",
+  "model_root": "E:/mineguard-models",
+  "repeats": 3,
+  "models": [
+    {
+      "name": "Qwen3-1.7B",
+      "model_id": "Qwen/Qwen3-1.7B",
+      "relative_path": "Qwen3-1.7B",
+      "parameters_b": 1.7,
+      "dtype": "bfloat16",
+      "enabled": true
+    },
+    {
+      "name": "Qwen3-4B",
+      "model_id": "Qwen/Qwen3-4B",
+      "relative_path": "Qwen3-4B",
+      "parameters_b": 4.0,
+      "dtype": "bfloat16",
+      "enabled": true
+    },
+    {
+      "name": "Qwen3-8B",
+      "model_id": "Qwen/Qwen3-8B",
+      "relative_path": "Qwen3-8B",
+      "parameters_b": 8.0,
+      "dtype": "bfloat16",
+      "enabled": true
+    }
+  ]
+}

@@ -32,6 +32,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--enforce-gate", action="store_true")
     parser.add_argument("--model-path", type=Path, default=Path(r"E:\project11\model_cache\Qwen3-0.6B-c1899de"))
     parser.add_argument("--device", default="cuda")
+    parser.add_argument(
+        "--dtype", choices=["auto", "float16", "bfloat16", "float32"], default="float16"
+    )
     parser.add_argument("--max-new-tokens", type=int, default=384)
     parser.add_argument("--base-url", default=os.getenv("MINEGUARD_LLM_BASE_URL", "http://127.0.0.1:8000/v1"))
     parser.add_argument("--model", default=os.getenv("MINEGUARD_LLM_MODEL", "Qwen3-1.7B"))
@@ -48,6 +51,7 @@ def build_target(args: argparse.Namespace, schema: dict, system_prompt: str):
             system_prompt=system_prompt,
             schema=schema,
             device=args.device,
+            dtype_name=args.dtype,
             max_new_tokens=args.max_new_tokens,
         )
     return OpenAICompatibleTarget(
@@ -113,6 +117,7 @@ def main() -> int:
         "platform": platform.platform(),
         "target": target.name,
         "model_path": str(args.model_path) if args.target == "qwen" else None,
+        "dtype": getattr(target, "dtype_name", None),
     }
     aggregate = {key: safe_json_number(value) for key, value in aggregate.items()}
     # Gate calculations are complete before non-finite display values become JSON null.

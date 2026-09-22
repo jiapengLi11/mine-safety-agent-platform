@@ -28,6 +28,8 @@ evals/
 ├── prompts/system-v1.txt                 受控决策Prompt
 ├── schemas/agent-decision-v1.schema.json 结构化输出契约
 ├── tests/                                负向测试和回归测试
+├── download_qwen_models.py               5090端断点下载模型
+├── run_model_matrix.py                   多模型串行重复评测与选型
 ├── run_eval.py                           跨平台入口
 └── run-evals.ps1                         Windows/Conda入口
 ```
@@ -69,6 +71,25 @@ powershell -ExecutionPolicy Bypass -File .\evals\run-evals.ps1 -Target openai -P
 ```
 
 每次运行生成 `results.json`、`report.md` 和 `report.html`。未加 `-EnforceGate` 时即使门禁失败也返回0，适合探索模型；发布前必须加该参数。
+
+## RTX 5090轻量交接包
+
+仓库提供 `tools/build_5090_eval_package.py`，它只打包评测代码、12条脱敏Goldens、JSON Schema、Prompt、门禁配置和四个BAT，不携带模型权重。构建命令：
+
+```powershell
+python .\tools\build_5090_eval_package.py
+```
+
+产物位于 `release/mineguard-qwen-matrix-5090.zip`。将其带到实验室后，按包内编号运行：
+
+1. `01_install_dependencies.bat`：复用 `ultralytics` 环境中的CUDA PyTorch，只补评测依赖；
+2. `02_download_models.bat`：在5090机器把Qwen3-1.7B、4B、8B下载至 `E:\mineguard-models`；
+3. `03_preflight.bat`：检查物理GPU 1、BF16、模型文件和评测资产，不加载模型；
+4. `04_run_matrix.bat`：三个模型各重复三次，串行运行并输出选型报告。
+
+每个模型和每次重复都使用独立Python进程，避免多个模型同时占用显存。每完成一次运行都会更新 `matrix-progress.json`，因此中途断电、网络中断或8B失败不会抹掉先前结果。结果目录还包含每次运行的案例级输出和指标，便于复核失败原因。
+
+自动选型遵循保守规则：某模型三次运行必须全部通过 `candidate-model` 门禁；多个模型合格时选择参数量最小者。若没有模型全通过，报告明确输出 `NONE`，而不是以平均分掩盖安全失败。
 
 ## 3060实测基线
 
