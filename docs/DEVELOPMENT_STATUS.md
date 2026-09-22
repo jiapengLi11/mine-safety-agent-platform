@@ -25,6 +25,7 @@ Completed:
 - Ran a reproducible RTX 5090 BF16 matrix across Qwen3-1.7B, 4B, and 8B with three repeats each. Qwen3-8B was the only raw model to pass every candidate gate in all three runs; 1.7B exposed an unknown-citation hallucination and 4B exposed schema drift plus a missing approval tool.
 - Implemented a Spring-managed deterministic Agent output gateway using the project-native Jackson 3 stack. It rejects malformed, oversized, duplicate-key, schema-drifted, rule-inconsistent, ungrounded, or unauthorized plans and fails closed to one human-review request.
 - Added eleven focused gateway regression tests covering the concrete 5090 model failures and common authorization bypass attempts.
+- Added a saved-output guarded replay evaluator and seven Python policy tests. Replaying all 108 RTX 5090 outputs changed Qwen3-1.7B from 0/3 raw passes to 3/3 guarded passes with an 8.33% block rate, no extra review escalation, and about 0.17 ms mean policy overhead. Qwen3-4B still failed because 66.67% of outputs required fallback; Qwen3-8B remained 3/3 with zero blocks.
 
 Next:
 
@@ -32,7 +33,7 @@ Next:
 - Add JPA persistence and Kafka detection-event consumer.
 - Replace the in-memory tracker with a Redis implementation.
 - Add a replay producer and the first Testcontainers integration test.
-- Connect the policy gateway to the future RAG/LLM orchestrator, persist raw outputs and violation codes, and keep tool authorization in a separate executor.
+- Connect the Java policy gateway to the future RAG/LLM orchestrator, persist raw outputs and violation codes, and keep tool authorization in a separate executor. The current system comparison is a saved-output replay through the aligned Python evaluation mirror.
 
 Environment facts:
 

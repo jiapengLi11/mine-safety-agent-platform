@@ -138,6 +138,8 @@ Expected current result: `22` tests, `0` failures, followed by an executable JAR
 
 The gateway is implemented and covered by 11 focused tests based on the real 5090 failure modes. The live LLM orchestrator, RAG retriever, audit persistence, and authorized tool executor are still separate roadmap work. See the [runtime gateway design](docs/architecture/DETERMINISTIC_AGENT_SAFETY_GATEWAY.md).
 
+Replaying all 108 saved RTX 5090 outputs through the aligned evaluation policy changed Qwen3-1.7B from 0/3 raw gate passes to 3/3 guarded passes by blocking 3 invented-citation responses out of 36, with no additional review escalation and about 0.17 ms mean policy overhead. Qwen3-4B remained unsuitable because 66.67% of outputs required fallback, while Qwen3-8B stayed at 3/3 with zero blocks. This is saved-output replay evidence; live Java orchestration remains pending.
+
 ## Agent evaluation and release gate
 
 The repository now includes an executable domain benchmark for the future RAG/Agent boundary. It checks structured-output validity, risk and decision preservation, high-risk escalation, evidence provenance, exact typed-tool plans, forbidden tools, prompt injection and latency. The deterministic rule target validates benchmark wiring in CI; local Qwen and OpenAI-compatible targets evaluate real candidate models without granting them execution authority.

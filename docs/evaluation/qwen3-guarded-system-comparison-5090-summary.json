@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "source_matrix": "evals/reports/20260922-123311-qwen-matrix",
+  "method": "saved_raw_output_replay_through_policy_mirror",
+  "cases_per_run": 12,
+  "repeats": 3,
+  "models": [
+    {
+      "name": "Qwen3-1.7B",
+      "raw_passed_runs": 0,
+      "guarded_passed_runs": 3,
+      "accepted_cases": 33,
+      "blocked_cases": 3,
+      "block_rate": 0.0833333333,
+      "review_escalation_rate": 0.0,
+      "mean_policy_latency_ms": 0.1699583333,
+      "raw_citation_precision": 0.9,
+      "guarded_citation_precision": 1.0,
+      "violations": {
+        "UNKNOWN_CITATION": 3,
+        "CITATION_MISMATCH": 3
+      }
+    },
+    {
+      "name": "Qwen3-4B",
+      "raw_passed_runs": 0,
+      "guarded_passed_runs": 0,
+      "accepted_cases": 12,
+      "blocked_cases": 24,
+      "block_rate": 0.6666666667,
+      "review_escalation_rate": 0.5833333333,
+      "mean_policy_latency_ms": 0.1568,
+      "raw_schema_valid_rate": 0.4166666667,
+      "guarded_schema_valid_rate": 1.0,
+      "violations": {
+        "UNEXPECTED_FIELD": 21,
+        "TOOL_PLAN_MISMATCH": 3
+      }
+    },
+    {
+      "name": "Qwen3-8B",
+      "raw_passed_runs": 3,
+      "guarded_passed_runs": 3,
+      "accepted_cases": 36,
+      "blocked_cases": 0,
+      "block_rate": 0.0,
+      "review_escalation_rate": 0.0,
+      "mean_policy_latency_ms": 0.1570972222,
+      "violations": {}
+    }
+  ],
+  "claim_boundary": "The Python policy mirror replayed saved model outputs. Java runtime integration and live end-to-end retesting remain pending."
+}

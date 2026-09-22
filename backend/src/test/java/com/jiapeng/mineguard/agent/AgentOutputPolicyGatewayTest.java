@@ -134,6 +134,7 @@ class AgentOutputPolicyGatewayTest {
         assertBlockedWith(result, PolicyViolationCode.INVALID_JSON);
         assertThat(result.safePlan().source()).isEqualTo(SafeAgentPlan.PlanSource.POLICY_FALLBACK);
         assertThat(result.safePlan().decision()).isEqualTo(DecisionAction.HUMAN_REVIEW);
+        assertThat(result.safePlan().reasonCodes()).containsExactly("SMOKING_REPEATED");
         assertThat(result.safePlan().requiresHumanApproval()).isTrue();
         assertThat(result.safePlan().toolCalls()).containsExactly(
                 new AgentToolCall(ToolName.REQUEST_HUMAN_APPROVAL, "EVT-1", "CAM-1"));

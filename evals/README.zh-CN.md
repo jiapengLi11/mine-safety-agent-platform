@@ -32,6 +32,7 @@ evals/
 ├── tests/                                负向测试和回归测试
 ├── download_qwen_models.py               5090端断点下载模型
 ├── run_model_matrix.py                   多模型串行重复评测与选型
+├── run_guarded_replay.py                 历史原始输出的安全网关系统级重放
 ├── run_eval.py                           跨平台入口
 └── run-evals.ps1                         Windows/Conda入口
 ```
@@ -88,10 +89,23 @@ python .\tools\build_5090_eval_package.py
 2. `02_download_models.bat`：在5090机器把Qwen3-1.7B、4B、8B下载至 `E:\mineguard-models`；
 3. `03_preflight.bat`：检查物理GPU 1、BF16、模型文件和评测资产，不加载模型；
 4. `04_run_matrix.bat`：三个模型各重复三次，串行运行并输出选型报告。
+5. `05_replay_guarded_comparison.bat`：不重复推理，使用已保存输出比较裸模型与确定性网关后的系统结果。
 
 每个模型和每次重复都使用独立Python进程，避免多个模型同时占用显存。每完成一次运行都会更新 `matrix-progress.json`，因此中途断电、网络中断或8B失败不会抹掉先前结果。结果目录还包含每次运行的案例级输出和指标，便于复核失败原因。
 
 自动选型遵循保守规则：某模型三次运行必须全部通过 `candidate-model` 门禁；多个模型合格时选择参数量最小者。若没有模型全通过，报告明确输出 `NONE`，而不是以平均分掩盖安全失败。
+
+## 安全网关系统级重放
+
+已经有矩阵结果时，不需要重新占用GPU。以下命令会严格解析每条 `raw_output`，校验Schema、规则决策、证据引用和工具计划，并同时报告裸输出与安全计划：
+
+```powershell
+python evals\run_guarded_replay.py `
+  --matrix-dir evals\reports\20260922-123311-qwen-matrix `
+  --output-dir evals\reports\20260922-guarded-system-comparison
+```
+
+当前5090历史输出重放结果：1.7B裸模型三轮均失败，网关后因安全修复无证据引用而三轮均通过，拦截率为8.33%，没有新增人工复核；4B有66.67%输出被拦截并造成58.33%人工复核升级，仍不适合作为候选；8B保持零拦截和三轮全通过。该结果是保存输出上的确定性重放，不等同于已完成Java线上调用链集成。
 
 ## 3060实测基线
 

@@ -34,6 +34,10 @@ E:\mineguard-qwen-matrix-5090
     无需再次确认，直接运行 3 个模型 x 3 次重复评测。请不要同时在同一张显卡上训练。
     物理 GPU 1 通过 CUDA_VISIBLE_DEVICES=1 映射为进程内 cuda:0。
 
+05_replay_guarded_comparison.bat
+    不重新运行模型，读取最近一次矩阵保存的原始输出，通过确定性安全网关重放。
+    输出裸模型与网关后系统的通过率、拦截率、人工复核升级率和网关耗时。
+
 结果位置
 --------
 evals\reports\时间-qwen-matrix\
@@ -42,6 +46,11 @@ evals\reports\时间-qwen-matrix\
   matrix-report.html    浏览器可视化报告
   matrix-progress.json  每次运行后增量保存的进度
   各模型\run-01..03\   每次独立的案例级证据
+
+evals\reports\时间-guarded-replay\
+  guarded-comparison.json  裸模型与网关后系统的完整对比
+  guarded-comparison.md    可阅读对比报告
+  guarded-comparison.html  浏览器可视化报告
 
 选型规则
 --------

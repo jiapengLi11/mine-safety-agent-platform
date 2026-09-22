@@ -97,7 +97,7 @@ Any violation returns `BLOCKED_TO_HUMAN_REVIEW` and discards the proposed tools.
 
 - preserves the authoritative risk level;
 - changes the operational decision to `HUMAN_REVIEW`;
-- uses reason code `MODEL_OUTPUT_POLICY_VIOLATION`;
+- preserves the authoritative rule reason codes while recording gateway failures separately as structured violations;
 - keeps only required evidence that was actually available;
 - emits exactly one `request_human_approval` call using the authoritative event and camera ids;
 - records source `POLICY_FALLBACK`.

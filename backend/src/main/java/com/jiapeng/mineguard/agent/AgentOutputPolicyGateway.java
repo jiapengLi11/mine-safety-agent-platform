@@ -198,7 +198,7 @@ public final class AgentOutputPolicyGateway {
                 context.ruleDecision().riskLevel(),
                 DecisionAction.HUMAN_REVIEW,
                 "Model output was blocked by deterministic safety policy.",
-                List.of("MODEL_OUTPUT_POLICY_VIOLATION"),
+                context.ruleDecision().reasonCodes(),
                 context.expectedCitations(),
                 true,
                 List.of(new AgentToolCall(

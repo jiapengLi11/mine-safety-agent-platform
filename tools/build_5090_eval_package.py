@@ -26,9 +26,8 @@ def main() -> int:
         if source.is_file():
             destination = STAGING / source.name
             if source.suffix.lower() == ".bat":
-                destination.write_text(
-                    source.read_text(encoding="ascii"), encoding="ascii", newline="\r\n"
-                )
+                with destination.open("w", encoding="ascii", newline="\r\n") as handle:
+                    handle.write(source.read_text(encoding="ascii"))
             else:
                 shutil.copy2(source, destination)
 
