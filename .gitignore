@@ -13,3 +13,6 @@ models/
 data/
 _render_qa/
 _render_qa_v2/
+evals/reports/
+.playwright-cli/
+output/playwright/

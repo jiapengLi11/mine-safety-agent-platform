@@ -4,7 +4,7 @@ MineGuard Agent 不是“YOLO 检测加一个聊天窗口”，而是一套把�
 
 [English README](README.md) | [完整设计手册](docs/矿区智能安全监控与处置平台系统设计与开发手册_v1.0.md) | [虚拟机部署](deploy/VM_DEPLOYMENT.md) | [开发状态](docs/DEVELOPMENT_STATUS.md)
 
-> 当前阶段：第一阶段开发中。已经完成后端工程骨架、核心领域规则、数据库基线、自动化测试和虚拟机真实部署。Kafka 消费、RTSP 推理、工单、RAG、Agent 和 Vue 控制台仍属于后续开发，不作为已完成功能宣传。
+> 当前阶段：第一阶段开发中。已经完成后端工程骨架、核心领域规则、数据库基线、自动化测试、虚拟机真实部署，以及Agent领域评测与发布门禁底座。Kafka 消费、RTSP 推理、工单、RAG、Agent 和 Vue 控制台仍属于后续开发，不作为已完成功能宣传。
 
 ## 一句话说明
 

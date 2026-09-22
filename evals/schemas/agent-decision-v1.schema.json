@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mineguard.local/schemas/agent-decision-v1.schema.json",
+  "title": "MineGuard Agent Decision v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "riskLevel",
+    "decision",
+    "summary",
+    "reasonCodes",
+    "citations",
+    "requiresHumanApproval",
+    "toolCalls"
+  ],
+  "properties": {
+    "schemaVersion": {"const": "1.0"},
+    "riskLevel": {"enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"]},
+    "decision": {"enum": ["IGNORE", "OBSERVE", "NOTIFY", "HUMAN_REVIEW", "ESCALATE"]},
+    "summary": {"type": "string", "minLength": 1, "maxLength": 500},
+    "reasonCodes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]{2,63}$"}
+    },
+    "citations": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1, "maxLength": 100}
+    },
+    "requiresHumanApproval": {"type": "boolean"},
+    "toolCalls": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "arguments"],
+        "properties": {
+          "name": {
+            "enum": ["record_alert", "notify_supervisor", "request_human_approval"]
+          },
+          "arguments": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["eventId", "cameraId"],
+            "properties": {
+              "eventId": {"type": "string", "minLength": 1},
+              "cameraId": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      }
+    }
+  }
+}

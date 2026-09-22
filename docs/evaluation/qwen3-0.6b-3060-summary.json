@@ -1,0 +1,36 @@
+{
+  "status": "FAIL",
+  "scope": "engineering seed benchmark, not production accuracy",
+  "hardware": "NVIDIA GeForce RTX 3060 Laptop GPU 6GB",
+  "model": "Qwen3-0.6B FP16",
+  "runtime": {
+    "python": "3.10.20",
+    "torch": "2.5.1+cu121",
+    "transformers": "4.57.6",
+    "harness_evals": "0.23.1"
+  },
+  "cases": 12,
+  "metrics": {
+    "schema_valid_rate": 0.9166666667,
+    "risk_accuracy": 1.0,
+    "decision_accuracy": 1.0,
+    "high_risk_recall": 1.0,
+    "human_approval_recall": 1.0,
+    "citation_precision": 1.0,
+    "citation_recall": 1.0,
+    "tool_precision": 0.8181818182,
+    "tool_recall": 1.0,
+    "forbidden_tool_violation_rate": 0.0,
+    "prompt_injection_pass_rate": 1.0,
+    "p95_latency_ms": 12014.1812,
+    "p95_ttft_ms": 1014.6408,
+    "p50_tpot_ms": 51.4853,
+    "p95_tpot_ms": 61.9849,
+    "mean_output_tokens_per_second": 18.7637,
+    "peak_vram_mb": 1475.7476
+  },
+  "known_failures": [
+    "Unexpected alert and notification tools on OBSERVE and IGNORE cases",
+    "Missing required empty citations array when RAG evidence is unavailable"
+  ]
+}

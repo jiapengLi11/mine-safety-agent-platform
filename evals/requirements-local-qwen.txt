@@ -1,0 +1,5 @@
+-r requirements.txt
+transformers>=4.51,<5
+torch>=2.5
+psutil>=6,<8
+

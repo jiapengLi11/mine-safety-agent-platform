@@ -10,7 +10,7 @@
 
 MineGuard connects YOLO-based visual perception, deterministic temporal rules, evidence-grounded RAG, a constrained AI agent, human approval, work orders, and model feedback. It is being built as a reproducible engineering system rather than a collection of disconnected demos.
 
-[中文说明](README.zh-CN.md) | [System handbook](docs/矿区智能安全监控与处置平台系统设计与开发手册_v1.0.md) | [VM deployment](deploy/VM_DEPLOYMENT.md) | [Development status](docs/DEVELOPMENT_STATUS.md)
+[中文说明](README.zh-CN.md) | [System handbook](docs/矿区智能安全监控与处置平台系统设计与开发手册_v1.0.md) | [Agent evaluation](evals/README.md) | [VM deployment](deploy/VM_DEPLOYMENT.md) | [Development status](docs/DEVELOPMENT_STATUS.md)
 
 > Project status: **Phase 1 in progress.** The backend foundation, domain rules, database baseline, tests, and VM deployment are implemented. Kafka ingestion, RTSP inference, work orders, RAG, Agent workflows, and the Vue console are roadmap items, not completed claims.
 
@@ -49,6 +49,7 @@ The first release deliberately starts as a modular monolith. Module boundaries a
 | Reproducible packaging | Spring Boot executable JAR and multi-stage Dockerfile |
 | Real VM deployment | Isolated MySQL account/schema, authenticated Redis, systemd user service, health endpoint |
 | Automated verification | 11 passing tests and GitHub Actions CI |
+| Agent evaluation foundation | Versioned Goldens, deterministic safety gates, Harness Evals adapter, local Qwen/OpenAI-compatible targets, JSON/Markdown/HTML evidence |
 
 ### Deliberate design choices
 
@@ -130,6 +131,19 @@ mvn clean verify
 
 Expected current result: `11` tests, `0` failures, followed by an executable JAR at `backend/target/mineguard-backend-0.1.0-SNAPSHOT.jar`.
 
+## Agent evaluation and release gate
+
+The repository now includes an executable domain benchmark for the future RAG/Agent boundary. It checks structured-output validity, risk and decision preservation, high-risk escalation, evidence provenance, exact typed-tool plans, forbidden tools, prompt injection and latency. The deterministic rule target validates benchmark wiring in CI; local Qwen and OpenAI-compatible targets evaluate real candidate models without granting them execution authority.
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\evals\run-evals.ps1 -Target rule -Profile ci -EnforceGate
+powershell -ExecutionPolicy Bypass -File .\evals\run-evals.ps1 -Target qwen -Profile candidate-model
+```
+
+An RTX 3060 run of Qwen3-0.6B passed risk, decision, citation, high-risk recall and injection checks, but failed the candidate release gate because of extra tools on `OBSERVE/IGNORE` cases and one missing required field. This negative result is retained deliberately: correct prose does not imply a safe execution plan. See the [full evaluation guide](evals/README.zh-CN.md) and [machine-readable summary](docs/evaluation/qwen3-0.6b-3060-summary.json).
+
+![RTX 3060 Qwen3 candidate evaluation](docs/assets/agent-eval-qwen3-0.6b-3060.png)
+
 ## VM deployment
 
 The verified development deployment runs on an Ubuntu VMware guest. Docker Compose is the preferred path. Because that VM currently cannot resolve Docker Hub, the repository also includes an exercised offline JAR installer:
@@ -167,6 +181,7 @@ mine-safety-agent-platform/
 - [ ] Alert evidence, work-order lifecycle, and Outbox publisher
 - [ ] Evidence-grounded RAG with retrieval evaluation
 - [ ] Constrained Agent with typed tools and human approval
+- [x] Domain Golden format, deterministic Agent gates, Harness Evals integration, and RTX 3060 candidate baseline
 - [ ] Vue operations console and fixed-video demonstration
 - [ ] Multi-stream load test with published hardware and workload assumptions
 
