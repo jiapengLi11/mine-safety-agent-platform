@@ -12,7 +12,7 @@ MineGuard connects YOLO-based visual perception, deterministic temporal rules, e
 
 [中文说明](README.zh-CN.md) | [System handbook](docs/矿区智能安全监控与处置平台系统设计与开发手册_v1.0.md) | [Agent evaluation](evals/README.md) | [LLM evaluation methodology](docs/evaluation/MineGuard_LLM安全评测方法与5090模型选型记录_20260922.md) | [VM deployment](deploy/VM_DEPLOYMENT.md) | [Development status](docs/DEVELOPMENT_STATUS.md)
 
-> Project status: **Phase 1 in progress.** The backend foundation, domain rules, database baseline, tests, and VM deployment are implemented. Kafka ingestion, RTSP inference, work orders, RAG, Agent workflows, and the Vue console are roadmap items, not completed claims.
+> Project status: **Phase 1 in progress.** The backend foundation, domain rules, database baseline, deterministic Agent output gateway, tests, and VM deployment are implemented. Kafka ingestion, RTSP inference, work orders, RAG, end-to-end Agent orchestration, and the Vue console are roadmap items, not completed claims.
 
 ## Why this project exists
 
@@ -48,8 +48,9 @@ The first release deliberately starts as a modular monolith. Module boundaries a
 | Modular architecture | Spring Modulith and an architecture verification test |
 | Reproducible packaging | Spring Boot executable JAR and multi-stage Dockerfile |
 | Real VM deployment | Isolated MySQL account/schema, authenticated Redis, systemd user service, health endpoint |
-| Automated verification | 11 passing tests and GitHub Actions CI |
+| Automated verification | 22 passing tests and GitHub Actions CI |
 | Agent evaluation foundation | Versioned Goldens, deterministic safety gates, Harness Evals adapter, local Qwen/OpenAI-compatible targets, JSON/Markdown/HTML evidence |
+| Deterministic Agent output gateway | Strict Jackson 3 parsing, duplicate-key and size defenses, rule/evidence/tool validation, fail-closed human-review fallback |
 
 ### Deliberate design choices
 
@@ -129,7 +130,13 @@ Set-Location -LiteralPath 'E:\project11\mine-safety-agent-platform'
 mvn clean verify
 ```
 
-Expected current result: `11` tests, `0` failures, followed by an executable JAR at `backend/target/mineguard-backend-0.1.0-SNAPSHOT.jar`.
+Expected current result: `22` tests, `0` failures, followed by an executable JAR at `backend/target/mineguard-backend-0.1.0-SNAPSHOT.jar`.
+
+## Deterministic Agent safety boundary
+
+`AgentOutputPolicyGateway` converts untrusted model JSON into either an accepted typed plan or a conservative human-review fallback. It rejects malformed or oversized JSON, duplicate keys, extra or missing fields, rule-decision drift, unavailable citations, forbidden tools, unexpected tool order, and non-authoritative event or camera arguments. A model response never becomes authorization merely because it is valid JSON.
+
+The gateway is implemented and covered by 11 focused tests based on the real 5090 failure modes. The live LLM orchestrator, RAG retriever, audit persistence, and authorized tool executor are still separate roadmap work. See the [runtime gateway design](docs/architecture/DETERMINISTIC_AGENT_SAFETY_GATEWAY.md).
 
 ## Agent evaluation and release gate
 
@@ -178,11 +185,12 @@ mine-safety-agent-platform/
 - [x] Architecture baseline and domain skeleton
 - [x] Detection contract, temporal-rule prototype, alert state machine
 - [x] MySQL/Redis VM integration and persistent service deployment
+- [x] Deterministic Agent output gateway with evidence and typed-tool policy
 - [ ] Detection persistence and Kafka consumer with replay tests
 - [ ] Redis atomic sliding-window implementation
 - [ ] Alert evidence, work-order lifecycle, and Outbox publisher
 - [ ] Evidence-grounded RAG with retrieval evaluation
-- [ ] Constrained Agent with typed tools and human approval
+- [ ] End-to-end Agent orchestration, audit persistence, and authorized tool execution
 - [x] Domain Golden format, deterministic Agent gates, Harness Evals integration, and RTX 3060 candidate baseline
 - [ ] Vue operations console and fixed-video demonstration
 - [ ] Multi-stream load test with published hardware and workload assumptions
@@ -201,6 +209,7 @@ mine-safety-agent-platform/
 - [Chinese system design and development handbook](docs/矿区智能安全监控与处置平台系统设计与开发手册_v1.0.md)
 - [Word handbook](docs/矿区智能安全监控与处置平台系统设计与开发手册_v1.0.docx)
 - [VM deployment and recovery procedure](deploy/VM_DEPLOYMENT.md)
+- [Deterministic Agent safety gateway](docs/architecture/DETERMINISTIC_AGENT_SAFETY_GATEWAY.md)
 - [Development status](docs/DEVELOPMENT_STATUS.md)
 
 ## Security and scope

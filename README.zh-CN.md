@@ -2,9 +2,11 @@
 
 MineGuard Agent 不是“YOLO 检测加一个聊天窗口”，而是一套把视觉检测结果转化为可追踪业务事件，并通过确定性规则、规程证据、受控 Agent、人工审批和工单闭环完成安全处置的工程化平台。
 
+[确定性 Agent 安全网关设计](docs/architecture/DETERMINISTIC_AGENT_SAFETY_GATEWAY.md) | [大模型安全评测方法](docs/evaluation/MineGuard_LLM安全评测方法与5090模型选型记录_20260922.md)
+
 [English README](README.md) | [完整设计手册](docs/矿区智能安全监控与处置平台系统设计与开发手册_v1.0.md) | [虚拟机部署](deploy/VM_DEPLOYMENT.md) | [开发状态](docs/DEVELOPMENT_STATUS.md)
 
-> 当前阶段：第一阶段开发中。已经完成后端工程骨架、核心领域规则、数据库基线、自动化测试、虚拟机真实部署，以及Agent领域评测与发布门禁底座。Kafka 消费、RTSP 推理、工单、RAG、Agent 和 Vue 控制台仍属于后续开发，不作为已完成功能宣传。
+> 当前阶段：第一阶段开发中。已经完成后端工程骨架、核心领域规则、数据库基线、确定性 Agent 输出安全网关、自动化测试、虚拟机真实部署，以及 Agent 领域评测与发布门禁底座。Kafka 消费、RTSP 推理、工单、RAG、端到端 Agent 编排和 Vue 控制台仍属于后续开发，不作为已完成功能宣传。
 
 ## 一句话说明
 
@@ -45,7 +47,7 @@ MineGuard 第一条规则原型采用“20 秒内至少 3 次吸烟检测”策�
 | database | Flyway 管理检测、告警、Outbox 和审计表 |
 | architecture | Spring Modulith 验证模块边界，避免代码逐渐退化成大泥球 |
 | deployment | Windows 构建、SSH 上传、独立数据库账号、Redis 认证和 systemd 常驻 |
-| test | 当前 11 个测试全部通过，覆盖领域边界和模块结构 |
+| test | 当前 22 个测试全部通过，覆盖领域边界、Agent 安全网关和模块结构 |
 
 ## 事件契约为什么重要
 
